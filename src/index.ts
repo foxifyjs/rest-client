@@ -1,6 +1,6 @@
 import Axios, { AxiosProxyConfig } from "axios";
 import { string } from "prototyped.js/es6/methods";
-import * as QS from "qs";
+import { IStringifyOptions, stringify } from "qs";
 import Count from "./modules/Count";
 import Index from "./modules/Index";
 import Show from "./modules/Show";
@@ -12,6 +12,7 @@ namespace Client {
     API: string;
     TOKEN?: string;
     PROXY?: AxiosProxyConfig;
+    QS?: IStringifyOptions;
   }
 
   export type Callback<T = any> = (error: Error | null, result: T) => void;
@@ -35,6 +36,11 @@ class Client<T extends object = any> {
    */
   public static setToken = (token: string) => CONFIG.TOKEN = token;
 
+  /**
+   * Sets global QS options
+   */
+  public static setQSOptions = (qs: IStringifyOptions) => CONFIG.QS = qs;
+
   protected _config = Object.assign({}, CONFIG);
 
   protected get _axios() {
@@ -51,7 +57,7 @@ class Client<T extends object = any> {
     return Axios.create({
       baseURL: config.API,
       headers,
-      paramsSerializer: QS.stringify,
+      paramsSerializer: params => stringify(params, config.QS),
       proxy: config.PROXY,
     });
   }
@@ -83,6 +89,19 @@ class Client<T extends object = any> {
     return this;
   }
 
+  /**
+   * Sets instance's QS options
+   */
+  public setQSOptions(qs: IStringifyOptions) {
+    this._config.QS = qs;
+
+    return this;
+  }
+
+  /**
+   * Requests [GET] `/{resource}/count` or `/{prefix}/{resource}/count`
+   * Results a number which is the count
+   */
   public count<R extends string>(resource: R): Count<T>;
   public count<R extends string>(prefix: string, resource: R): Count<T>;
   public count(prefix: string, resource?: string) {
@@ -94,6 +113,10 @@ class Client<T extends object = any> {
     return new Count<T>(this._axios, resource, prefix);
   }
 
+  /**
+   * Requests [GET] `/{resource}` or `/{prefix}/{resource}`
+   * Results an object containing array of resources and a meta
+   */
   public index<R extends string>(resource: R): Index<T, R>;
   public index<R extends string>(prefix: string, resource: R): Index<T, R>;
   public index(prefix: string, resource?: string) {
@@ -105,6 +128,10 @@ class Client<T extends object = any> {
     return new Index(this._axios, resource, prefix);
   }
 
+  /**
+   * Requests [GET] `/{resource}/{id}` or `/{prefix}/{resource}/{id}`
+   * Results an object which is the desired resource
+   */
   public show<R extends string>(resource: R): Show<T>;
   public show<R extends string>(prefix: string, resource: R): Show<T>;
   public show(prefix: string, resource?: string) {
@@ -116,6 +143,10 @@ class Client<T extends object = any> {
     return new Show<T>(this._axios, resource, prefix);
   }
 
+  /**
+   * Requests [POST] `/{resource}` or `/{prefix}/{resource}` by the given resource data
+   * Results an object which is the stored resource
+   */
   public store(resource: string, data: T): Promise<T>;
   public store(prefix: string, resource: string, data: T): Promise<T>;
   public store(resource: string, data: T, callback: Client.Callback<T>): void;
@@ -143,6 +174,10 @@ class Client<T extends object = any> {
       .catch((err: Error) => (callback as any)(err));
   }
 
+  /**
+   * Requests [PATCH] `/{resource}/{id}` or `/{prefix}/{resource}/{id}` by the given resource data
+   * Results an object which is the updated resource
+   */
   public update(resource: string, id: string, data: Partial<T>): Promise<T>;
   public update(prefix: string, resource: string, id: string, data: Partial<T>): Promise<T>;
   public update(resource: string, id: string, data: Partial<T>, callback: Client.Callback<T>): void;
@@ -174,6 +209,10 @@ class Client<T extends object = any> {
       .catch((err: Error) => (callback as any)(err));
   }
 
+  /**
+   * Requests [DELETE] `/{resource}/{id}` or `/{prefix}/{resource}/{id}`
+   * Results an object containing a message
+   */
   public delete(path: string, id: string): Promise<string>;
   public delete(path: string, id: string, callback: Client.Callback<string>): void;
   public delete(path: string, id: string, callback?: Client.Callback<string>) {
