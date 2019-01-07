@@ -48,6 +48,8 @@ Client for [`rest-client`](https://github.com/foxifyjs/rest-client) package
 const Client = require("@foxify/rest-client");
 ```
 
+> for full documentation see [here](https://rest-client.js.org)
+
 ## Versioning
 
 We use [SemVer](http://semver.org) for versioning. For the versions available, see the [tags on this repository](https://github.com/foxifyjs/rest-client/tags).

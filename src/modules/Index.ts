@@ -23,10 +23,11 @@ class Index<T extends object, R extends string = any> extends Filter<T> {
     super();
   }
 
-  public include(relation: string) {
+  public include(relations: string | string[]) {
     if (!this._params.include) this._params.include = [];
 
-    this._params.include.push(relation);
+    if (Array.isArray) this._params.include = this._params.include.concat(relations);
+    else this._params.include.push(relations);
 
     return this;
   }

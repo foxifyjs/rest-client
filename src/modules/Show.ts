@@ -7,10 +7,11 @@ class Show<T extends object> {
 
   constructor(protected _axios: AxiosInstance, protected _resource: string, protected _prefix = "") { }
 
-  public include(relation: string) {
+  public include(relations: string | string[]) {
     if (!this._params.include) this._params.include = [];
 
-    this._params.include.push(relation);
+    if (Array.isArray) this._params.include = this._params.include.concat(relations);
+    else this._params.include.push(relations);
 
     return this;
   }

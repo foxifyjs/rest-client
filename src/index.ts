@@ -37,7 +37,7 @@ class Client<T extends object = any> {
   public static setToken = (token: string) => CONFIG.TOKEN = token;
 
   /**
-   * Sets global QS options
+   * Sets global QS.stringify options
    */
   public static setQSOptions = (qs: IStringifyOptions) => CONFIG.QS = qs;
 
@@ -211,7 +211,7 @@ class Client<T extends object = any> {
 
   /**
    * Requests [DELETE] `/{resource}/{id}` or `/{prefix}/{resource}/{id}`
-   * Results an object containing a message
+   * Results a message
    */
   public delete(path: string, id: string): Promise<string>;
   public delete(path: string, id: string, callback: Client.Callback<string>): void;
