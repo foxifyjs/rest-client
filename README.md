@@ -1,6 +1,6 @@
 # rest-client <!-- omit in toc -->
 
-Client for [`rest-client`](https://github.com/foxifyjs/rest-client) package
+Client for [`foxify-restify-odin`](https://github.com/foxifyjs/foxify-restify-odin) package
 
 [![Npm Version](https://img.shields.io/npm/v/rest-client.svg)](https://www.npmjs.com/package/rest-client)
 [![TypeScript Version](https://img.shields.io/npm/types/rest-client.svg)](https://www.typescriptlang.org)
