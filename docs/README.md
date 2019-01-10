@@ -173,7 +173,7 @@ class Client<T extends object = any> {
 
 Requests \[GET\] `/{resource}` or `/{prefix}/{resource}`
 
-Returns an instance of [Index](Index.md)
+Returns an instance of [Index](Indexing.md)
 
 #### client.show()
 
